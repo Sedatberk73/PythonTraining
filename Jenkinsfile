@@ -3,14 +3,14 @@ pipeline {
     stages {
         stage('Install Dependencies') {
             steps {
-                // Install dependencies, including Selenium
-                sh 'pip install -U seleniumbase'
+                // Install dependencies using pip
+                bat 'pip install -U seleniumbase'
             }
         }
         stage('Run Tests') {
             steps {
                 // Run the Python tests with pytest
-                sh 'pytest --dashboard --html=report.html -s --headless'
+                bat 'pytest --dashboard --html=report.html -s --headless'
             }
         }
     }
