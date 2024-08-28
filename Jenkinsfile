@@ -1,16 +1,29 @@
 pipeline {
     agent any
-
     stages {
-        stage('Build') {
+        stage('Install Dependencies') {
             steps {
-                pip install -U seleniumbase
+                // Install dependencies, including Selenium
+                sh 'pip install -U seleniumbase'
             }
         }
-        stage('Test') {
+        stage('Run Tests') {
             steps {
-                pytest --dashboard --html=report.html -s --headless
+                // Run the Python tests with pytest
+                sh 'pytest --dashboard --html=report.html -s --headless'
             }
+        }
+    }
+    post {
+        always {
+            // Archive the test reports
+            archiveArtifacts artifacts: 'report.html', allowEmptyArchive: true
+        }
+        success {
+            echo 'The tests have passed!'
+        }
+        failure {
+            echo 'The tests have failed!'
         }
     }
 }
